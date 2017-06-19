@@ -1,0 +1,13 @@
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\bin\Debug\DCC Log Importer.exe.config
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\bin\Debug\DCC Log Importer.exe
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\bin\Debug\DCC Log Importer.pdb
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\obj\Debug\DCCLogImporter.Form1.resources
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\obj\Debug\DCCLogImporter.Properties.Resources.resources
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\obj\Debug\DCCLogImporter.csproj.GenerateResource.Cache
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\obj\Debug\DCC Log Importer.exe
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\obj\Debug\DCC Log Importer.pdb
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\obj\Debug\DCCLogImporter.csprojResolveAssemblyReference.cache
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\bin\Debug\DCC Log Importer.exe.manifest
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\bin\Debug\DCC Log Importer.application
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\obj\Debug\DCC Log Importer.exe.manifest
+C:\Users\walkd\Documents\Workspace\DCCLogImporter\DCCLogImporter\obj\Debug\DCC Log Importer.application
