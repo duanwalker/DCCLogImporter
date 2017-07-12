@@ -34,6 +34,7 @@ namespace DCCLogImporter
         string Exception = "";
         string ActualFileName = "";
         public static int rnPackageFilesProcessed = 0;
+        public static Boolean rnFilesComplete = false;
 
         #endregion
         
@@ -53,38 +54,48 @@ namespace DCCLogImporter
 
             //place in log number of files found in directory
             ReportProgress(new ProgressStatus(ProcessName, string.Format("{0} files found.", fileEntries.Length)));
-
-            foreach (string fileName in fileEntries) 
-            {                
-                //increment files counters
-                rnPackageFilesProcessed++;
-
-                string ActualFileName = fileName.Substring(m_SourceDirectory.Length + 1);
+            if (fileEntries.Length != 0)
+            {
+                foreach (string fileName in fileEntries) 
+                {                
+                    ActualFileName = fileName.Substring(m_SourceDirectory.Length + 1);
                     
-                //post to log the file being processed
-                ReportProgress(new ProgressStatus(ProcessName, string.Format("Processing file:{0} ...", ActualFileName)));
-                ReportProgress(new ProgressStatus(ProcessName, null, rnPackageFilesProcessed, fileEntries.Length));
+                    //post to log the file being processed
+                    ReportProgress(new ProgressStatus(ProcessName, string.Format("Processing file:{0} ...", ActualFileName)));
 
-                //check to see if the current file has already processed
-                if (!HasLogProcessed(ActualFileName))
-                {
-                    //if not then run import method
-                    ImportFile(fileName);
-                }
-                else
-                {
-                    // otherwise log message that file already exists
-                    ReportProgress(new ProgressStatus(ProcessName, string.Format("This log: {0} has already been processed and loaded to database", ActualFileName)));
+                    //check to see if the current file has already processed
+                    if (!HasLogProcessed(ActualFileName))
+                    {
+                        //if not then run import method
+                        ImportFile(fileName);
+                    }
+                    else
+                    {
+                        // otherwise log message that file already exists
+                        ReportProgress(new ProgressStatus(ProcessName, string.Format("This log: {0} has already been processed and loaded to database", ActualFileName)));
                       
-                }
-                    
-                Archiver compress = new Archiver();
-                compress.Zip(fileName, m_SourceDirectory);
-                compress.Zip(fileName.Replace(".log", ".Exceptions"), m_SourceDirectory);
+                    }
 
-                ReportProgress(new ProgressStatus(ProcessName, string.Format(" complete. {0} file(s) processed.", rnPackageFilesProcessed), rnPackageFilesProcessed, fileEntries.Length));
-           }
-
+                    Archiver compress = new Archiver();
+                    compress.Zip(fileName, m_SourceDirectory);
+                    compress.Zip(fileName.Replace(".log", ".Exceptions"), m_SourceDirectory);
+                    //increment files counters
+                    rnPackageFilesProcessed++;
+                    ReportProgress(new ProgressStatus(ProcessName, string.Format(" complete. {0} of {1} file(s) processed.", rnPackageFilesProcessed, fileEntries.Length), rnPackageFilesProcessed, fileEntries.Length));
+                    if (rnPackageFilesProcessed == fileEntries.Length)
+                    {
+                        rnFilesComplete = true;
+                    }
+                    else
+                    {
+                        rnFilesComplete = false;
+                    }
+               }
+            }
+            else
+            {
+                rnFilesComplete = true;
+            }
              return null;
         }
 

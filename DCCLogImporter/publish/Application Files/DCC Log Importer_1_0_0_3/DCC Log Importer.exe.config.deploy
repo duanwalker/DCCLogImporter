@@ -6,7 +6,7 @@
   <appSettings>
     <add key="dbConnection"
       value="Data Source=tcp:bookvaultqarpt.database.windows.net,1433;Database=bookvaultqarpt;Integrated Security=False;User ID=dbreadwriteexecute;Password=Sqlrwe20!7;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False"/>
-    <add key="FTPLogFileSourceDirectory" value="C:\inetpub\logs\LogFiles\FTPSVC1"/>
+    <add key="FTPLogFileSourceDirectory" value="C:\inetpub\logs\LogFiles\FTPSVC1\"/>
     <add key="DCCLoaderLogSourceDirectory" value="C:\DCCv3\DCCLoader"/>
     <add key="DCCManifestLogSourceDirectory" value="C:\DCCv3\DCCManifestGen"/>
     <add key="RNPackageLogFileDirectory" value="C:\DCCv3\RNPackage"/>

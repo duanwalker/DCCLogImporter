@@ -37,7 +37,7 @@ namespace DCCLogImporter
         string Exception = "";
         public static int dccManiFilesProcessed = 0;
         string ActualFileName = "";
-
+        public static Boolean DCCManiFilesComplete = false;
         #endregion
         
         //constructor
@@ -57,36 +57,47 @@ namespace DCCLogImporter
 
             //place in log number of files found in directory
             ReportProgress(new ProgressStatus(ProcessName, string.Format("{0} files found.", dccManiFilesProcessed)));
+            if (fileEntries.Length != 0)
+            {
+                foreach (string fileName in fileEntries) 
+                {                
+                    //get process log file name from fileName string
+                    ActualFileName = fileName.Substring(m_SourceDirectory.Length + 1);
 
-            foreach (string fileName in fileEntries) 
-            {                
-                //increment files counters
-                dccManiFilesProcessed++;
+                    //post to log the file being processed
+                    ReportProgress(new ProgressStatus(ProcessName, string.Format("Processing file:{0} ...", ActualFileName)));
 
-                //get process log file name from fileName string
-                ActualFileName = fileName.Substring(m_SourceDirectory.Length + 1);
+                    //check to see if the current file has already processed
+                    if (!HasLogProcessed(ActualFileName))
+                    {
+                        //if not then run import method
+                        ImportFile(fileName);
+                    }
+                    else
+                    {
+                        // otherwise log message that file already exists
+                        ReportProgress(new ProgressStatus(ProcessName, string.Format("This log: {0} has already been processed and loaded to database", ActualFileName)));
+                    }
 
-                //post to log the file being processed
-                ReportProgress(new ProgressStatus(ProcessName, string.Format("Processing file:{0} ...", ActualFileName)));
-                ReportProgress(new ProgressStatus(ProcessName, null, dccManiFilesProcessed, fileEntries.Length));
-
-                //check to see if the current file has already processed
-                if (!HasLogProcessed(ActualFileName))
-                {
-                    //if not then run import method
-                    ImportFile(fileName);
+                    Archiver compress = new Archiver();
+                    compress.Zip(fileName, m_SourceDirectory);
+                    compress.Zip(fileName.Replace(".log", ".Exceptions"), m_SourceDirectory);
+                    //increment file counters
+                    dccManiFilesProcessed++;
+                    ReportProgress(new ProgressStatus(ProcessName, string.Format(" complete. {0} of {1} file(s) processed.", dccManiFilesProcessed, fileEntries.Length), dccManiFilesProcessed, fileEntries.Length));
+                    if (dccManiFilesProcessed == fileEntries.Length)
+                    {
+                        DCCManiFilesComplete = true;
+                    }
+                    else
+                    {
+                        DCCManiFilesComplete = false;
+                    }
                 }
-                else
-                {
-                    // otherwise log message that file already exists
-                    ReportProgress(new ProgressStatus(ProcessName, string.Format("This log: {0} has already been processed and loaded to database", ActualFileName)));
-                }
-
-                Archiver compress = new Archiver();
-                compress.Zip(fileName, m_SourceDirectory);
-                compress.Zip(fileName.Replace(".log", ".Exceptions"), m_SourceDirectory);
-
-                ReportProgress(new ProgressStatus(ProcessName, string.Format(" complete. {0} file(s) processed.", dccManiFilesProcessed), dccManiFilesProcessed, fileEntries.Length));
+            }
+            else
+            {
+                DCCManiFilesComplete = true;
             }
             return null;
          }

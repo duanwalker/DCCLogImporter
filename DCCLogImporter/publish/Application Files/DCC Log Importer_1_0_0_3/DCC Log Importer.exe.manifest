@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="DCC Log Importer.exe" version="1.0.0.3" publicKeyToken="b76d41842b2d8d62" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="DCC Log Importer" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="DCC Log Importer.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the 
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward 
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="DCC Log Importer.exe" size="38824">
+      <assemblyIdentity name="DCC Log Importer" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Tw+nd2n4QdiB3WdFIVrdG8gQ8e6rBVMxd7CLCrTUy24=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="DCC Log Importer.exe.config" size="1018">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>6k513/tVV8smtsvve8OqJOss5BCNIULntz3lwtlXD9s=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=BTCORP\walkd" issuerKeyHash="986aafcb0117ddb721cfc21d936cf5e355fed160" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>wvtkdfJ0TN9oCV+tmHEWDU6WwcyKnKHECRcdR70V+CI=</DigestValue></Reference></SignedInfo><SignatureValue>elKuCJsn9e3+8wA/f+D1FQ6+jbEaeBwr8uTL9X7V/jQ/XzVOvUYQ8ca8v6rJVLpdmu+uN8Rx7oE5IcAVkI3sjYUICTe7g8lLvoZK68H/I7g7VYsa7okU2dUY+Wy9i0SQgwemynZ54w3hmpuHqpcYDIHlicBq30L/yXXETh1UdeA=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>6ri8ioJnMsgVhCu2GJBEG/eeZJxtcXM+KWfHzGP25X46MqJA3u2y9X7EzmT2kHM9jzkiLKoRAGTL1MtS9BHTIhtccyOabkLSL5GG/seJEVQUINmz2imiKZQdCOcNegujYoPjgOTBvSkJrxfVh+wYBp2zd0DzHMbv36Px2JpYkss=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="22f815bd471d1709c4a19c8accc1964e0d167198ad5f0968df4c74f27564fbc2" Description="" Url=""><as:assemblyIdentity name="DCC Log Importer.exe" version="1.0.0.3" publicKeyToken="b76d41842b2d8d62" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=BTCORP\walkd</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>+oAHGosf69pOhtUGkuVXTmM6r2EzoJupzL/FIP/x8RY=</DigestValue></Reference></SignedInfo><SignatureValue>oiBPjH5SuIknxYH0qZtDt6H5JXt7AfvX9eUpMEH511qlZM8OoFsa0TqviKu/xqfoSlI4PEC+nvMiBkecf/kbSs0BOcr5jc9QDYdQfd1bhsuK1Gkb9K63J5ZXtbvkCJHS1lz5IJfG2FBM/T+BRZMYcrV/Df+QYug9P+R0bEHtW3Y=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>6ri8ioJnMsgVhCu2GJBEG/eeZJxtcXM+KWfHzGP25X46MqJA3u2y9X7EzmT2kHM9jzkiLKoRAGTL1MtS9BHTIhtccyOabkLSL5GG/seJEVQUINmz2imiKZQdCOcNegujYoPjgOTBvSkJrxfVh+wYBp2zd0DzHMbv36Px2JpYkss=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIByTCCATKgAwIBAgIQEcljyY8vWZhJp/X9b2NvPzANBgkqhkiG9w0BAQsFADAjMSEwHwYDVQQDHhgAQgBUAEMATwBSAFAAXAB3AGEAbABrAGQwHhcNMTcwNTIzMTkwOTIyWhcNMTgwNTI0MDEwOTIyWjAjMSEwHwYDVQQDHhgAQgBUAEMATwBSAFAAXAB3AGEAbABrAGQwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAOq4vIqCZzLIFYQrthiQRBv3nmScbXFzPilnx8xj9uV+OjKiQN7tsvV+xM5k9pBzPY85IiyqEQBky9TLUvQR0yIbXHMjmm5C0i+Rhv7HiRFUFCDZs9opoimUHQjnDXoLo2KD44Dkwb0pCa8X1YfsGAads3dA8xzG79+j8diaWJLLAgMBAAEwDQYJKoZIhvcNAQELBQADgYEApWIBNHGvqLmbV92d1HJtWVi+xZSTtGA/reIPCkjWLR2sDZOjBf89HM8u5CVxz+i+BMxqTOmdRTWbx2PSAHw7DGHz4Y/MpmXECLFminKX5Z4I/p5BKs5YbWMltSs+5K42ZW6hRSvYsJ6oUYyFixP7lZXVC14XYqHsdV2bxoi87ks=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

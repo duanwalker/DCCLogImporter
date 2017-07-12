@@ -33,7 +33,7 @@ namespace DCCLogImporter
         public static int ebsFilesProcessed = 0;
         string m_SourceDirectory = "";
         string ActualFileName = "";
-
+        public static Boolean ebsFilesComplete = false;
         #endregion
         
         //constructor
@@ -53,35 +53,46 @@ namespace DCCLogImporter
 
             //place in log number of files found in directory
             ReportProgress(new ProgressStatus(ProcessName, string.Format("{0} files found.", fileEntries.Length)));
-
-            foreach (string fileName in fileEntries) 
-            {             
-                //increment file counters
-                ebsFilesProcessed++;
-
-                ActualFileName = fileName.Substring(m_SourceDirectory.Length + 1);
+            if (fileEntries.Length != 0)
+            {
+                foreach (string fileName in fileEntries) 
+                {             
+                    ActualFileName = fileName.Substring(m_SourceDirectory.Length + 1);
                 
-                //post to log the file being processed
-                ReportProgress(new ProgressStatus(ProcessName, string.Format("Processing file:{0} ...", ActualFileName)));
-                ReportProgress(new ProgressStatus(ProcessName, null, ebsFilesProcessed, fileEntries.Length));
+                    //post to log the file being processed
+                    ReportProgress(new ProgressStatus(ProcessName, string.Format("Processing file:{0} ...", ActualFileName)));
 
-                //check to see if current file has already processed
-                if (!HasLogProcessed(ActualFileName))
-                {
-                    //if not then run import method
-                    ImportFile(fileName);
-                }
-                else
-                {
-                    // otherwise log message that file already exists
-                    ReportProgress(new ProgressStatus(ProcessName, string.Format("This log: {0} has already been processed and loaded to database", ActualFileName)));
-                }
-                        
-                Archiver compress = new Archiver();
-                compress.Zip(fileName, m_SourceDirectory);
-                compress.Zip(fileName.Replace(".log", ".Exceptions"), m_SourceDirectory);
+                    //check to see if current file has already processed
+                    if (!HasLogProcessed(ActualFileName))
+                    {
+                        //if not then run import method
+                        ImportFile(fileName);
+                    }
+                    else
+                    {
+                        // otherwise log message that file already exists
+                        ReportProgress(new ProgressStatus(ProcessName, string.Format("This log: {0} has already been processed and loaded to database", ActualFileName)));
+                    }
 
-                ReportProgress(new ProgressStatus(ProcessName, string.Format(" complete. {0} file(s) processed.", ebsFilesProcessed), ebsFilesProcessed, fileEntries.Length));
+                    Archiver compress = new Archiver();
+                    compress.Zip(fileName, m_SourceDirectory);
+                    compress.Zip(fileName.Replace(".log", ".Exceptions"), m_SourceDirectory);
+                    //increment file counters
+                    ebsFilesProcessed++;
+                    ReportProgress(new ProgressStatus(ProcessName, string.Format(" complete. {0} of {1} file(s) processed.", ebsFilesProcessed, fileEntries.Length), ebsFilesProcessed, fileEntries.Length));
+                    if (ebsFilesProcessed == fileEntries.Length)
+                    {
+                        ebsFilesComplete = true;
+                    }
+                    else
+                    {
+                        ebsFilesComplete = false;
+                    }
+                }
+            }
+            else
+            {
+                ebsFilesComplete = true;
             }
             return null;
         }

@@ -33,6 +33,7 @@ namespace DCCLogImporter
         string[] DCCManifiles;
         string[] DCCLoaderfiles;
         string[] RNfiles;
+        Boolean filesComplete = false;
 
         private Logging m_logging = new Logging();
 
@@ -42,7 +43,7 @@ namespace DCCLogImporter
         BackgroundWorker m_backgroundWorkerRN;
         BackgroundWorker m_backgroundWorkerDCCManifest;
         BackgroundWorker m_backgroundWorkerDCCLoader;
-        BackgroundWorker m_backgroundWorkerArchiver;
+       // BackgroundWorker m_backgroundWorkerArchiver;
 
         //List<BackgroundWorker> lstBackgroundWorker = new List<BackgroundWorker>();
 
@@ -90,13 +91,6 @@ namespace DCCLogImporter
             m_backgroundWorkerDCCLoader.WorkerReportsProgress = true;
             m_backgroundWorkerDCCLoader.WorkerSupportsCancellation = true;
 
-            m_backgroundWorkerArchiver = new BackgroundWorker();
-            m_backgroundWorkerArchiver.DoWork += new DoWorkEventHandler(BackgroundWorkerArchiver_DoWork);
-            m_backgroundWorkerArchiver.ProgressChanged += new ProgressChangedEventHandler(BackgroundWorker_ProgressChanged);
-            m_backgroundWorkerArchiver.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackgroundWorker_RunWorkerCompleted);
-            m_backgroundWorkerArchiver.WorkerReportsProgress = true;
-            m_backgroundWorkerArchiver.WorkerSupportsCancellation = true;
-
             if (args.Length >= 2 && args[1] == "/Start")
             {
                 btnStart_Click(this, new EventArgs());
@@ -114,6 +108,7 @@ namespace DCCLogImporter
         private void Form1_Closed(object sender, System.EventArgs e)
         {
             m_logging.Close();
+            
         }
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -135,7 +130,6 @@ namespace DCCLogImporter
                 m_backgroundWorkerDCCLoader.RunWorkerAsync();
                 lblDCCLoaderStatus.Visible = true;
 
-                //m_backgroundWorkerArchiver.RunWorkerAsync();
             }
             catch (Exception ex)
             {
@@ -221,7 +215,9 @@ namespace DCCLogImporter
             WorkerBase workerBaseEBS = null;
             try
             {
-                 BackgroundWorker backgroundWorker = (BackgroundWorker)sender;
+                m_logging.Write(string.Format("EBSLoaderLogFileSource: {0}", ConfigurationManager.AppSettings["EBSLoaderLogFileSource"]));
+
+                BackgroundWorker backgroundWorker = (BackgroundWorker)sender;
                  workerBaseEBS = new EBSLoaderProcessing(backgroundWorker, e, ConfigurationManager.AppSettings["EBSLoaderLogFileSource"]);
                  workerBaseEBS.DoWork();
             }
@@ -284,31 +280,11 @@ namespace DCCLogImporter
             }            
         }
 
-        void BackgroundWorkerArchiver_DoWork(object sender, DoWorkEventArgs e)
-        {
-            WorkerBase workerBaseArchiver = null;
-            try
-            {
-                BackgroundWorker backgroundWorker = (BackgroundWorker)sender;
-                workerBaseArchiver = new Archiver(backgroundWorker, e);
-                workerBaseArchiver.DoWork();
-            }
-            catch (Exception ex)
-            {
-
-                m_logging.Write(string.Format("{0} failed at {1}.", workerBaseArchiver.GetType(), ex));
-                totalFail++;
-            }
-        }
-
         void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             BackgroundWorker backgroundWorker = (BackgroundWorker)sender;
 
             ProgressStatus ps = (ProgressStatus)e.UserState;
-
-            
-           
 
             #region process name switch
             switch (ps.ProcessName)
@@ -316,15 +292,12 @@ namespace DCCLogImporter
                 case "FTPProcess":
 
                         lblFTP.Text = "FTPProcess: " + ps.Message;
-
                         progressBarFTP.Maximum = FTPfiles.Length;
-
                         if (ps.CurrentValue > 0)
                         {
-                        progressBarFTP.Value = ps.CurrentValue;
-                        lblFTPStatus.Text = string.Format("Processing File: {0} of {1}", progressBarFTP.Value, progressBarFTP.Maximum);
-                        }                
-                       
+                            progressBarFTP.Value = ps.CurrentValue;
+                            lblFTPStatus.Text = string.Format("Processing File: {0} of {1}", progressBarFTP.Value, progressBarFTP.Maximum);
+                        }                               
                         progressBarFTP.Refresh();
                     break;
 
@@ -332,47 +305,47 @@ namespace DCCLogImporter
                         lblEBSLoader.Text = "EBSLoaderProcess: " + ps.Message;
                         progressBarEBSLoader.Maximum = EBSfiles.Length;
 
-                    if (ps.CurrentValue > 0)
-                    {
-                        progressBarEBSLoader.Value = ps.CurrentValue;
-                        lblEBSLoaderStatus.Text = string.Format("Processing File: {0} of {1}", progressBarEBSLoader.Value, progressBarEBSLoader.Maximum);
-                    }                  
-                    progressBarEBSLoader.Refresh();
-                    break;
+                        if (ps.CurrentValue > 0)
+                        {
+                            progressBarEBSLoader.Value = ps.CurrentValue;
+                            lblEBSLoaderStatus.Text = string.Format("Processing File: {0} of {1}", progressBarEBSLoader.Value, progressBarEBSLoader.Maximum);
+                        }                  
+                        progressBarEBSLoader.Refresh();
+                        break;
 
                 case "RNPackageProcess":
                         lblRNPackage.Text = "RNPackageProcess: " + ps.Message;
                         progressBarRNPackage.Maximum = RNfiles.Length;
 
-                    if (ps.CurrentValue > 0)
-                    {
-                        progressBarRNPackage.Value = ps.CurrentValue;
-                        lblRNPackageStatus.Text = string.Format("Processing File: {0} of {1}", progressBarRNPackage.Value, progressBarRNPackage.Maximum);
-                    }         
-                    progressBarRNPackage.Refresh();
-                    break;
+                        if (ps.CurrentValue > 0)
+                        {
+                            progressBarRNPackage.Value = ps.CurrentValue;
+                            lblRNPackageStatus.Text = string.Format("Processing File: {0} of {1}", progressBarRNPackage.Value, progressBarRNPackage.Maximum);
+                        }         
+                        progressBarRNPackage.Refresh();
+                        break;
 
                 case "DCCManifestProcess":
-                    lblDCCManifest.Text = "DCCManifestProcess: " + ps.Message;
-                    progressBarDCCManifest.Maximum = DCCManifiles.Length;
-                    if (ps.CurrentValue > 0)
-                    {
-                        progressBarDCCManifest.Value = ps.CurrentValue;
-                        lblDCCManifestStatus.Text = string.Format("Processing File: {0} of {1}", progressBarDCCManifest.Value, progressBarDCCManifest.Maximum);
-                    }
-                    progressBarDCCManifest.Refresh();
-                    break;
+                        lblDCCManifest.Text = "DCCManifestProcess: " + ps.Message;
+                        progressBarDCCManifest.Maximum = DCCManifiles.Length;
+                        if (ps.CurrentValue > 0)
+                        {
+                            progressBarDCCManifest.Value = ps.CurrentValue;
+                            lblDCCManifestStatus.Text = string.Format("Processing File: {0} of {1}", progressBarDCCManifest.Value, progressBarDCCManifest.Maximum);
+                        }
+                        progressBarDCCManifest.Refresh();
+                        break;
 
                 case "DCCLoaderProcess":
-                    lblDCCLoader.Text = "DCCLoaderProcess: " + ps.Message;
-                    progressBarDCCLoader.Maximum = DCCLoaderfiles.Length;
-                    if (ps.CurrentValue > 0)
-                    {
-                        progressBarDCCLoader.Value = ps.CurrentValue;
-                        lblDCCLoaderStatus.Text = string.Format("Processing File: {0} of {1}", progressBarDCCLoader.Value, progressBarDCCLoader.Maximum);
-                    }
-                    progressBarDCCLoader.Refresh();
-                    break;
+                        lblDCCLoader.Text = "DCCLoaderProcess: " + ps.Message;
+                        progressBarDCCLoader.Maximum = DCCLoaderfiles.Length;
+                        if (ps.CurrentValue > 0)
+                        {
+                            progressBarDCCLoader.Value = ps.CurrentValue;
+                            lblDCCLoaderStatus.Text = string.Format("Processing File: {0} of {1}", progressBarDCCLoader.Value, progressBarDCCLoader.Maximum);
+                        }
+                        progressBarDCCLoader.Refresh();
+                        break;
 
                 default:
                     break;
@@ -400,8 +373,20 @@ namespace DCCLogImporter
             {
                 progressBarPercentage = (ProgressBarTotalCurrent / ProgressBarTotalMax) * 100.00;
             }
-            else progressBarPercentage = 100;
-            if (progressBarPercentage == 100)
+            else
+            {
+                progressBarPercentage = 100;
+            }
+
+            if (FTPProcessing.ftpFilesComplete && DCCLoaderProcessing.DCCLoaderComplete && DCCManifestProcessing.DCCManiFilesComplete && EBSLoaderProcessing.ebsFilesComplete && RNPackageProcessing.rnFilesComplete)
+            {
+                filesComplete = true;
+            }
+            else
+            {
+                filesComplete = false;
+            }
+            if (progressBarPercentage == 100 && filesComplete == true)
             {
                 
                 totalSuccess = FTPProcessing.ftpFilesProcessed + RNPackageProcessing.rnPackageFilesProcessed + EBSLoaderProcessing.ebsFilesProcessed + DCCLoaderProcessing.dccLoaderFilesProcessed + DCCManifestProcessing.dccManiFilesProcessed;
@@ -409,13 +394,20 @@ namespace DCCLogImporter
                 lblFinalCompletion.Text = string.Format("Total number of new files successfully processed: {0} ",totalSuccess );
                 lblFinalFails.Text = string.Format("Total number of files not processed: {0} ", totalFail);
 
-               // if (!m_backgroundWorkerArchiver.IsBusy)
-                 //   m_backgroundWorkerArchiver.RunWorkerAsync();
-                
-                
+                               
                // btnStart.Enabled = true;
 
                 m_logging.Close();
+                if (System.Windows.Forms.Application.MessageLoop )
+                {
+                    // WinForms app
+                    System.Windows.Forms.Application.Exit();
+                }
+                else
+                {
+                    // Console app
+                    System.Environment.Exit(1);
+                }
             }
             progressBarTotalCompletion.Maximum = (int)ProgressBarTotalMax;
             progressBarTotalCompletion.Value = (int)ProgressBarTotalCurrent;

@@ -80,7 +80,7 @@ namespace DCCLogImporter
             Process zipProcess = System.Diagnostics.Process.Start(startZip);
             zipProcess.WaitForExit();
         }
-
+        //not used
         protected override object Process()
         {
             

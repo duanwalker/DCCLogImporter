@@ -35,6 +35,7 @@ namespace DCCLogImporter
         public static Boolean blnFileExist = false;
         public static string ActualFileName = "";
         public static int ftpFilesProcessed = 0;
+        public static Boolean ftpFilesComplete = false;
 
         #endregion
         
@@ -54,34 +55,44 @@ namespace DCCLogImporter
 
             //place in log number of files found in directory
             ReportProgress(new ProgressStatus(ProcessName, string.Format("{0} files found.", fileEntries.Length)));
-
-            foreach (string fileName in fileEntries) 
-            {
-                ftpFilesProcessed++;
-
-                ActualFileName = fileName.Substring(m_SourceDirectory.Length);
-
-                ReportProgress(new ProgressStatus(ProcessName, string.Format("Processing file:{0} ...", ActualFileName)));
-                ReportProgress(new ProgressStatus(ProcessName, null, ftpFilesProcessed, fileEntries.Length));
-
-                //check to see if current file has already processed 
-                if (!HasLogProcessed(ActualFileName))
+            if (fileEntries.Length != 0)
+            {            
+                foreach (string fileName in fileEntries) 
                 {
-                    ImportFile(fileName);
-                }
-                else
-                {
-                    // otherwise place msg in log that file already exists
-                    ReportProgress(new ProgressStatus(ProcessName, string.Format("This log: {0} has already been processed and loaded to database", ActualFileName)));
-                }
+                    ActualFileName = fileName.Substring(m_SourceDirectory.Length);
 
-                Archiver compress = new Archiver();
-                compress.Zip(fileName, m_SourceDirectory);
-                compress.Zip(fileName.Replace(".log", ".Exceptions"), m_SourceDirectory);
+                    ReportProgress(new ProgressStatus(ProcessName, string.Format("Processing file:{0} ...", ActualFileName)));
 
-                ReportProgress(new ProgressStatus(ProcessName, string.Format(" complete. {0} file(s) processed.", ftpFilesProcessed), ftpFilesProcessed, fileEntries.Length));
+                    //check to see if current file has already processed 
+                    if (!HasLogProcessed(ActualFileName))
+                    {
+                        ImportFile(fileName);
+                    }
+                    else
+                    {
+                        // otherwise place msg in log that file already exists
+                        ReportProgress(new ProgressStatus(ProcessName, string.Format("This log: {0} has already been processed and loaded to database", ActualFileName)));
+                    }
+
+                    Archiver compress = new Archiver();
+                    compress.Zip(fileName, m_SourceDirectory);
+                    compress.Zip(fileName.Replace(".log", ".Exceptions"), m_SourceDirectory);
+                    ftpFilesProcessed++;
+                    ReportProgress(new ProgressStatus(ProcessName, string.Format(" complete. {0} of {1} file(s) processed.", ftpFilesProcessed, fileEntries.Length), ftpFilesProcessed, fileEntries.Length));
+                    if (ftpFilesProcessed == fileEntries.Length)
+                    {
+                        ftpFilesComplete = true;
+                    }
+                    else
+                    {
+                        ftpFilesComplete = false;
+                    }
+                }
             }
-
+            else
+            {
+                ftpFilesComplete = true;
+            }
             return null;
         }
 
@@ -153,9 +164,10 @@ namespace DCCLogImporter
 
         Boolean HasLogProcessed(string filename)
         {
-            
 
+            Boolean blnFileExist = false;
             //set up connection string
+
             string connectionString = ConfigurationManager.AppSettings["dbConnection"];
            
             //set up connection
@@ -163,7 +175,7 @@ namespace DCCLogImporter
             {
                 conn.Open();
                 try
-                {
+                {                   
                     SqlCommand cmd = new SqlCommand("SELECT TOP 1 * FROM ProcessLogFiles WHERE ProcessLogFile = @fileName");
                     cmd.Parameters.AddWithValue("@fileName", filename);
                     cmd.CommandType = CommandType.Text;
